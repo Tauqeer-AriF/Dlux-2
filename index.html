@@ -716,6 +716,53 @@
   .reveal-delay-2 { transition-delay: 0.2s; }
   .reveal-delay-3 { transition-delay: 0.3s; }
 
+  /* BACK TO TOP */
+  .back-to-top {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    width: 48px;
+    height: 48px;
+    background: transparent;
+    border: none;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+  }
+  .back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  .back-to-top:hover {
+    background: var(--gold);
+    color: var(--black);
+    border-color: var(--gold);
+  }
+  .back-to-top .progress-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  .back-to-top .progress-ring circle {
+    fill: transparent;
+    stroke-width: 2;
+  }
+  .back-to-top .progress-track { stroke: var(--border); }
+  .back-to-top .progress-bar {
+    stroke: var(--gold);
+    transition: stroke-dashoffset 10ms linear;
+  }
+  .back-to-top .icon { width: 20px; height: 20px; position: relative; z-index: 2; }
+
   /* RESPONSIVE */
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
@@ -742,6 +789,13 @@
     .about-grid { grid-template-columns: 1fr; gap: 40px; }
     .about-heading { font-size: 44px; }
     .about-quote { font-size: 18px; }
+
+    .back-to-top {
+      bottom: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+    }
 
     .timeline-item { gap: 30px; padding-left: 40px; }
     .timeline-year { font-size: 40px; }
@@ -784,7 +838,7 @@
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div style="display: flex; align-items: center; gap: 20px;">
-    <a href="https://www.djdlux.co.uk" class="nav-cta">Official Site</a>
+    <a href="https://dejavufm.com" class="nav-cta" target="_blank" rel="noopener noreferrer">Dejavufm Radio</a>
     <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
       <span></span><span></span><span></span>
     </button>
@@ -1107,12 +1161,22 @@
       DJ Bookings · Production Enquiries · Creative Engagement Services · Mentorship
     </p>
     <div style="margin-top: 52px;" class="reveal reveal-delay-3">
-      <a href="https://www.djdlux.co.uk" class="btn-primary" style="display:inline-block;">
-        Visit Official Website
+      <a href="https://dejavufm.com" class="btn-primary" style="display:inline-block;" target="_blank" rel="noopener noreferrer">
+        Dejavufm Radio
       </a>
     </div>
   </div>
 </section>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+  <svg class="progress-ring" viewBox="0 0 48 48">
+    <circle class="progress-track" cx="24" cy="24" r="23"/>
+    <circle class="progress-bar" id="progressBar" cx="24" cy="24" r="23"/>
+  </svg>
+  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5M5 12l7-7 7 7"/>
+  </svg>
+</button>
 
 <!-- FOOTER -->
 <footer>
@@ -1315,6 +1379,30 @@ const statObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 
 document.querySelectorAll('.stat-box').forEach(box => statObserver.observe(box));
+
+// BACK TO TOP LOGIC
+const backToTopBtn = document.getElementById('backToTop');
+const progressBar = document.getElementById('progressBar');
+const radius = progressBar.r.baseVal.value;
+const circumference = 2 * Math.PI * radius;
+
+progressBar.style.strokeDasharray = `${circumference} ${circumference}`;
+progressBar.style.strokeDashoffset = circumference;
+
+window.addEventListener('scroll', () => {
+  const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+  progressBar.style.strokeDashoffset = circumference - (scrollPercent * circumference);
+
+  if (window.scrollY > 400) {
+    backToTopBtn.classList.add('visible');
+  } else {
+    backToTopBtn.classList.remove('visible');
+  }
+});
+
+backToTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 </script>
 </body>
 </html>
