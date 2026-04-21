@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DJ DLUX | DJ · Producer · Curator | Official Site</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23060606'/%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23C9A84C' stroke-width='0.5' opacity='0.2'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%23C9A84C' stroke-width='0.5' opacity='0.2'/%3E%3Ccircle cx='50' cy='50' r='16' fill='%23C9A84C'/%3E%3Ccircle cx='50' cy='50' r='4' fill='%23060606'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96D;
+    --gold-dark: #8B6914;
+    --black: #060606;
+    --dark: #0D0D0D;
+    --surface: #111111;
+    --border: rgba(201,168,76,0.15);
+    --text: #F0EAD8;
+    --muted: #8A8070;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* CUSTOM CURSOR */
+  @media (hover: hover) and (pointer: fine) {
+    body { cursor: none; }
+
+  .cursor {
+    position: fixed; width: 10px; height: 10px;
+    background: var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.6); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.3s, height 0.3s;
+  }
+  body:hover .cursor { opacity: 1; }
+  }
+
+  @media (hover: none) {
+    .cursor, .cursor-ring { display: none; }
+  }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    z-index: 1000;
+    pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 500;
+    padding: 24px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.4s, padding 0.4s, backdrop-filter 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(6,6,6,0.92);
+    backdrop-filter: blur(12px);
+    padding: 16px 60px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 10px 24px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--black); }
+
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 600;
+  }
+  .menu-toggle span {
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* HERO */
+  #hero {
+    position: relative; height: 100vh; overflow: hidden;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  #particle-canvas {
+    position: absolute; inset: 0; z-index: 1;
+  }
+  .hero-bg-text {
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(120px, 22vw, 340px);
+    letter-spacing: -0.02em;
+    color: rgba(201,168,76,0.03);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    z-index: 2; pointer-events: none;
+    user-select: none;
+  }
+  .hero-content {
+    position: relative; z-index: 10;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-size: 11px; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 1s 0.3s forwards;
+  }
+  .hero-eyebrow span { display: inline-block; margin: 0 12px; }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: '';
+    display: inline-block; width: 40px; height: 1px;
+    background: var(--gold); vertical-align: middle;
+    margin: 0 12px;
+  }
+
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 200px);
+    letter-spacing: 0.04em;
+    line-height: 0.9;
+    color: var(--text);
+    opacity: 0; animation: fadeUp 1s 0.5s forwards;
+    position: relative;
+  }
+  .hero-name .glitch {
+    position: relative;
+    display: inline-block;
+  }
+  .hero-name .glitch::before,
+  .hero-name .glitch::after {
+    content: attr(data-text);
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+  .hero-name .glitch::before {
+    color: #ff004c;
+    clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+    animation: glitch1 4s infinite linear;
+    opacity: 0;
+  }
+  .hero-name .glitch::after {
+    color: #00fff9;
+    clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+    animation: glitch2 4s infinite linear;
+    opacity: 0;
+  }
+  @keyframes glitch1 {
+    0%,90%,100% { opacity: 0; transform: none; }
+    91% { opacity: 0.8; transform: translateX(-4px); }
+    93% { opacity: 0; }
+    95% { opacity: 0.6; transform: translateX(4px); }
+    97% { opacity: 0; }
+  }
+  @keyframes glitch2 {
+    0%,90%,100% { opacity: 0; transform: none; }
+    92% { opacity: 0.7; transform: translateX(4px); }
+    94% { opacity: 0; }
+    96% { opacity: 0.5; transform: translateX(-2px); }
+    98% { opacity: 0; }
+  }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 2.5vw, 32px);
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    font-style: italic;
+    margin-top: 12px;
+    opacity: 0; animation: fadeUp 1s 0.7s forwards;
+  }
+  .hero-year {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--muted); margin-top: 16px;
+    opacity: 0; animation: fadeUp 1s 0.85s forwards;
+  }
+  .hero-ctas {
+    display: flex; gap: 20px; justify-content: center;
+    margin-top: 52px;
+    opacity: 0; animation: fadeUp 1s 1s forwards;
+  }
+  .btn-primary {
+    padding: 15px 44px; font-size: 11px; backface-visibility: hidden;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    background: var(--gold); color: var(--black);
+    text-decoration: none; font-weight: 500;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(201,168,76,0.35);
+  }
+  .btn-ghost {
+    padding: 15px 44px; font-size: 11px; backface-visibility: hidden;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    border: 1px solid rgba(201,168,76,0.5); color: var(--text);
+    text-decoration: none;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* WAVEFORM */
+  .waveform {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 120px; z-index: 5;
+    display: flex; align-items: flex-end; justify-content: center;
+    gap: 3px; padding: 0 20px 0;
+    pointer-events: none;
+  }
+  .wave-bar {
+    background: linear-gradient(to top, var(--gold-dark), var(--gold));
+    width: 3px; border-radius: 2px 2px 0 0;
+    opacity: 0.5;
+  }
+  .scroll-hint {
+    position: absolute; bottom: 50px; left: 0; right: 0;
+    z-index: 10; text-align: center; pointer-events: none;
+    opacity: 0; animation: fadeUp 1s 1.4s forwards;
+  }
+  .scroll-hint p {
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .scroll-line {
+    width: 1px; height: 40px; background: linear-gradient(var(--gold), transparent);
+    margin: 0 auto; animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%,100% { opacity: 0.3; transform: scaleY(0.5); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTIONS */
+  section { position: relative; }
+
+  .section-inner {
+    max-width: 1240px; margin: 0 auto;
+    padding: 0 60px;
+  }
+
+  /* SINCE STRIP */
+  .since-strip {
+    background: var(--gold);
+    padding: 14px 0;
+    overflow: hidden;
+    position: relative; z-index: 2;
+  }
+  .since-track {
+    display: flex; gap: 60px;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  .since-track span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px; letter-spacing: 0.3em;
+    color: var(--black); flex-shrink: 0;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ABOUT */
+  #about {
+    padding: 140px 0;
+    background: var(--dark);
+  }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 100px; align-items: center;
+  }
+  .about-label {
+    font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .about-label::before {
+    content: ''; display: block; width: 32px; height: 1px; background: var(--gold);
+  }
+  .about-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(44px, 5vw, 72px);
+    font-weight: 300; line-height: 1.05;
+    color: var(--text); margin-bottom: 32px;
+  }
+  .about-heading em { color: var(--gold); font-style: italic; }
+  .about-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-style: italic;
+    color: var(--gold-light); line-height: 1.5;
+    margin-bottom: 28px;
+    padding-left: 24px;
+    border-left: 2px solid var(--gold);
+  }
+  .about-body {
+    font-size: 16px; line-height: 1.85;
+    color: var(--muted); margin-bottom: 18px;
+  }
+  .about-body strong { color: var(--text); font-weight: 400; }
+  .about-right { position: relative; display: flex; flex-direction: column; align-items: center; }
+  .portrait-frame {
+    position: relative; width: 100%; max-width: 420px;
+    aspect-ratio: 3/4; border: 1px solid var(--border);
+    padding: 12px; background: var(--surface);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  }
+  .portrait-frame::before {
+    content: ''; position: absolute; inset: -8px;
+    border: 1px solid var(--gold); opacity: 0.2; pointer-events: none;
+  }
+  .about-img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(1) brightness(0.7);
+    transition: filter 0.6s ease, transform 0.6s ease;
+  }
+  .portrait-frame:hover .about-img { filter: grayscale(0.4) brightness(1); transform: scale(1.02); }
+
+  .vinyl-container {
+    position: absolute; bottom: -40px; right: -40px;
+    width: 220px; height: 220px; z-index: 5;
+  }
+  .vinyl {
+    width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle at center,
+      #1a1a1a 0%, #1a1a1a 12%,
+      #0d0d0d 12.5%, #0d0d0d 13%,
+      #222 13%, #222 16%,
+      #0a0a0a 16.5%,
+      #181818 20%, #111 22%, #1a1a1a 24%,
+      #0d0d0d 26%, #181818 30%,
+      #111 32%, #1a1a1a 36%,
+      #0d0d0d 38%, #181818 43%,
+      #111 46%, #0d0d0d 50%,
+      #181818 54%, #111 58%,
+      #0d0d0d 62%, #181818 68%,
+      #111 72%, #0d0d0d 76%,
+      #111 80%, #0d0d0d 84%,
+      #111 88%, #0d0d0d 100%
+    );
+    animation: spin 4s linear infinite;
+    box-shadow:
+      0 0 0 1px rgba(201,168,76,0.1),
+      0 0 60px rgba(0,0,0,0.8),
+      inset 0 0 40px rgba(0,0,0,0.5);
+    position: relative;
+  }
+  .vinyl::after {
+    content: '';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px; height: 60px; border-radius: 50%;
+    background: radial-gradient(circle, var(--gold) 0%, var(--gold-dark) 60%, #5c4010 100%);
+    box-shadow: 0 0 20px rgba(201,168,76,0.4);
+  }
+  .vinyl-label {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 7px; letter-spacing: 0.1em;
+    color: var(--black); text-align: center;
+    line-height: 1.2;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .vinyl-glow {
+    position: absolute; inset: -20px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%,100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+  .vinyl-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin-top: 80px; width: 100%;
+  }
+  .stat-box {
+    border: 1px solid var(--border);
+    padding: 20px; text-align: center;
+    background: rgba(201,168,76,0.03);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .stat-box:hover {
+    border-color: rgba(201,168,76,0.4);
+    background: rgba(201,168,76,0.06);
+  }
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px; color: var(--gold);
+    letter-spacing: 0.05em; line-height: 1;
+  }
+  .stat-label {
+    font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* DIVIDER */
+  .gold-divider {
+    width: 100%; height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    opacity: 0.3;
+  }
+
+  /* TIMELINE */
+  #legacy { padding: 140px 0; background: var(--black); }
+  .section-header { margin-bottom: 80px; }
+  .section-label {
+    font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::before {
+    content: ''; display: block; width: 32px; height: 1px; background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 300; color: var(--text);
+  }
+  .section-title em { color: var(--gold); font-style: italic; }
+  .timeline {
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    opacity: 0.3;
+  }
+  .timeline-item {
+    display: grid; grid-template-columns: 120px 1fr;
+    gap: 60px; padding: 48px 0 48px 60px;
+    position: relative;
+    opacity: 0; transform: translateX(-20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .timeline-item.visible { opacity: 1; transform: none; }
+  .timeline-item::before {
+    content: '';
+    position: absolute; left: -4px; top: 52px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 12px rgba(201,168,76,0.6);
+  }
+  .timeline-year {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px; color: var(--gold);
+    letter-spacing: 0.05em; line-height: 1;
+    opacity: 0.8;
+  }
+  .timeline-content {}
+  .timeline-era {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 10px;
+  }
+  .timeline-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300;
+    color: var(--text); margin-bottom: 14px;
+  }
+  .timeline-desc {
+    font-size: 15px; line-height: 1.8; color: var(--muted);
+  }
+  .timeline-desc strong { color: var(--text); font-weight: 400; }
+
+  /* MENTORED */
+  #mentored {
+    padding: 140px 0;
+    background: var(--surface);
+  }
+  .artists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1px;
+    margin-top: 60px;
+    border: 1px solid var(--border);
+  }
+  .artist-card {
+    padding: 32px 28px;
+    border: 1px solid transparent;
+    background: var(--surface);
+    transition: background 0.3s, border-color 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .artist-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .artist-card:hover { background: rgba(201,168,76,0.05); }
+  .artist-card:hover::before { transform: scaleX(1); }
+  .artist-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px; letter-spacing: 0.15em;
+    color: var(--gold); opacity: 0.5; margin-bottom: 10px;
+  }
+  .artist-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300; color: var(--text);
+  }
+
+  /* AFFILIATIONS */
+  #affiliations { padding: 140px 0; background: var(--black); }
+  .affil-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 24px; margin-top: 60px;
+  }
+  .affil-card {
+    padding: 48px 44px;
+    border: 1px solid var(--border);
+    background: rgba(201,168,76,0.02);
+    position: relative; overflow: hidden;
+    transition: border-color 0.4s, background 0.4s;
+  }
+  .affil-card::after {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 60px; height: 60px;
+    border-top: 1px solid var(--gold);
+    border-right: 1px solid var(--gold);
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .affil-card:hover { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.04); }
+  .affil-card:hover::after { opacity: 1; }
+  .affil-year {
+    font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px;
+  }
+  .affil-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 300; color: var(--text);
+    margin-bottom: 14px; line-height: 1.1;
+  }
+  .affil-desc {
+    font-size: 14px; line-height: 1.75; color: var(--muted);
+  }
+
+  /* QUOTE SECTION */
+  #manifesto {
+    padding: 120px 0;
+    background: var(--gold);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  #manifesto::before {
+    content: '"';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 600px; line-height: 0.8;
+    color: rgba(0,0,0,0.05);
+    position: absolute; top: -40px; left: -60px;
+    pointer-events: none;
+  }
+  .manifesto-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 300; font-style: italic;
+    color: var(--black); line-height: 1.4;
+    max-width: 900px; margin: 0 auto 24px;
+    position: relative; z-index: 1;
+  }
+  .manifesto-attr {
+    font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: rgba(0,0,0,0.6);
+    position: relative; z-index: 1;
+  }
+
+  /* SOCIALS */
+  #socials { padding: 100px 0; background: var(--dark); }
+  .socials-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic;
+    color: var(--muted); text-align: center;
+    margin-bottom: 48px;
+  }
+  .social-links {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    justify-content: center;
+  }
+  .social-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border: 1px solid var(--border);
+    color: var(--muted); text-decoration: none;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    transition: color 0.3s, border-color 0.3s, background 0.3s;
+  }
+  .social-link:hover {
+    color: var(--gold); border-color: var(--gold);
+    background: rgba(201,168,76,0.05);
+  }
+  .social-link svg { width: 14px; height: 14px; }
+
+  /* CONTACT */
+  #contact {
+    padding: 140px 0;
+    background: var(--black);
+    text-align: center;
+  }
+  .contact-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 10vw, 140px);
+    letter-spacing: 0.06em; color: var(--text);
+    margin-bottom: 24px;
+  }
+  .contact-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-style: italic;
+    color: var(--muted); margin-bottom: 52px;
+  }
+  .contact-email {
+    display: inline-block;
+    font-size: 20px; letter-spacing: 0.05em;
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 4px;
+    transition: border-color 0.3s;
+  }
+  .contact-email:hover { border-color: var(--gold); }
+  .contact-note {
+    font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); margin-top: 20px;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 60px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--black);
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; letter-spacing: 0.15em; color: var(--gold);
+    text-decoration: none;
+  }
+  .footer-copy {
+    font-size: 12px; color: var(--muted); letter-spacing: 0.1em;
+  }
+  .footer-link {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-link:hover { color: var(--gold); }
+
+  /* REVEAL ANIMATIONS */
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    nav.scrolled { padding: 12px 24px; }
+    .menu-toggle { display: flex; }
+    .nav-links {
+      position: fixed; top: 0; right: -100%;
+      width: 100%; height: 100vh;
+      background: var(--black);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+    .nav-links.active { right: 0; }
+    .nav-links a { font-size: 16px; color: var(--text); }
+    .nav-logo { font-size: 24px; }
+    .nav-cta { padding: 8px 18px; font-size: 10px; }
+
+    .section-inner { padding: 0 24px; }
+    #about, #legacy, #mentored, #affiliations, #contact { padding: 80px 0; }
+
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-heading { font-size: 44px; }
+    .about-quote { font-size: 18px; }
+
+    .timeline-item { gap: 30px; padding-left: 40px; }
+    .timeline-year { font-size: 40px; }
+
+    .affil-grid { grid-template-columns: 1fr; }
+    .vinyl-container { width: 160px; height: 160px; right: 0; bottom: -20px; }
+    .vinyl { width: 160px; height: 160px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
+
+    /* TOGGLE ANIMATION */
+    .menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+  }
+
+  @media (max-width: 600px) {
+    .hero-ctas { flex-direction: column; gap: 12px; width: 100%; max-width: 280px; margin-left: auto; margin-right: auto; }
+    .hero-ctas a { width: 100%; text-align: center; }
+    .timeline-item { grid-template-columns: 1fr; gap: 10px; padding: 32px 0 32px 30px; }
+    .timeline-item::before { top: 38px; }
+    .timeline-year { font-size: 32px; }
+    .contact-title { font-size: 48px; }
+    .manifesto-text { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">DJ DLUX</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#legacy">Legacy</a></li>
+    <li><a href="#mentored">Artists</a></li>
+    <li><a href="#affiliations">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div style="display: flex; align-items: center; gap: 20px;">
+    <a href="https://www.djdlux.co.uk" class="nav-cta">Official Site</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="particle-canvas"></canvas>
+  <div class="hero-bg-text">DLUX</div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">
+      <span>DJ</span><span>Producer</span><span>Curator</span>
+    </p>
+    <h1 class="hero-name">
+      <span class="glitch" data-text="DJ">DJ</span>
+      <br>
+      <span class="glitch" data-text="DLUX">DLUX</span>
+    </h1>
+    <p class="hero-sub">The Architect of British Sound</p>
+    <p class="hero-year">Est. 1986 · London, United Kingdom</p>
+    <div class="hero-ctas">
+      <a href="#about" class="btn-primary">Discover the Legacy</a>
+      <a href="#contact" class="btn-ghost">Book DJ DLUX</a>
+    </div>
+  </div>
+
+  <div class="waveform" id="waveform"></div>
+
+  <div class="scroll-hint">
+    <p>Scroll</p>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- SINCE STRIP -->
+<div class="since-strip">
+  <div class="since-track" id="marquee-track">
+    <span>Jungle Pioneer</span>
+    <span>·</span>
+    <span>Since 1986</span>
+    <span>·</span>
+    <span>Deja Vu FM</span>
+    <span>·</span>
+    <span>Brain Records</span>
+    <span>·</span>
+    <span>UK Underground</span>
+    <span>·</span>
+    <span>DJ · Producer · Curator</span>
+    <span>·</span>
+    <span>Hardcore Pioneer</span>
+    <span>·</span>
+    <span>Pirate Radio Movement</span>
+    <span>·</span>
+    <span>Jungle Pioneer</span>
+    <span>·</span>
+    <span>Since 1986</span>
+    <span>·</span>
+    <span>Deja Vu FM</span>
+    <span>·</span>
+    <span>Brain Records</span>
+    <span>·</span>
+    <span>UK Underground</span>
+    <span>·</span>
+    <span>DJ · Producer · Curator</span>
+    <span>·</span>
+    <span>Hardcore Pioneer</span>
+    <span>·</span>
+    <span>Pirate Radio Movement</span>
+    <span>·</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-left">
+        <div class="about-label reveal">About DJ DLUX</div>
+        <h2 class="about-heading reveal reveal-delay-1">
+          The <em>Architect</em><br>of the UK Sound
+        </h2>
+        <blockquote class="about-quote reveal reveal-delay-2">
+          "I don't play one genre,<br>I play the culture."
+        </blockquote>
+        <p class="about-body reveal reveal-delay-2">
+          Since <strong>1986</strong>, DJ Dlux has been a pillar of British underground music — a true pioneer of the Pirate Radio movement whose career spans over four decades of cultural evolution. He isn't merely a witness to the history of the UK sound; he is one of its <strong>primary architects</strong>.
+        </p>
+        <p class="about-body reveal reveal-delay-3">
+          Joining the legendary <strong>Brain Records in 1991</strong>, he became a central figure in the development of Hardcore and Jungle, working alongside Bizzy B and producing with Lennie De Ice and DJ Hype. His work during this era established a technical standard and an authentic Jungle pressure that remains his most noted contribution to the culture.
+        </p>
+        <div style="margin-top: 40px;" class="reveal reveal-delay-3">
+          <a href="https://www.djdlux.co.uk/resume" class="btn-ghost" style="display:inline-block;">
+            Full Biography
+          </a>
+        </div>
+      </div>
+      <div class="about-right reveal reveal-delay-2">
+        <div class="portrait-frame">
+          <img src="Screenshot_1.png" alt="DJ DLUX Portrait" class="about-img">
+          <div class="vinyl-container">
+            <div class="vinyl-glow"></div>
+            <div class="vinyl">
+              <div class="vinyl-label">DLUX</div>
+            </div>
+          </div>
+        </div>
+        <div class="vinyl-stats">
+          <div class="stat-box reveal reveal-delay-1">
+            <div class="stat-number" data-target="40">0</div>
+            <div class="stat-label">Years Active</div>
+          </div>
+          <div class="stat-box reveal reveal-delay-2">
+            <div class="stat-number" data-target="1991">0</div>
+            <div class="stat-label">Brain Records</div>
+          </div>
+          <div class="stat-box reveal reveal-delay-2">
+            <div class="stat-number" data-target="8">0</div>
+            <div class="stat-label">Major Artists Mentored</div>
+          </div>
+          <div class="stat-box reveal reveal-delay-3">
+            <div class="stat-number" data-target="1">0</div>
+            <div class="stat-label">MOBO-Winning Mentee</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- TIMELINE / LEGACY -->
+<section id="legacy">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label reveal">Career Timeline</div>
+      <h2 class="section-title reveal reveal-delay-1">Four Decades of <em>Legacy</em></h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">1986</div>
+        <div class="timeline-content">
+          <div class="timeline-era">The Beginning</div>
+          <h3 class="timeline-title">Entering the Underground</h3>
+          <p class="timeline-desc">DJ Dlux emerged from the UK underground scene, embracing the pirate radio movement that was reshaping British culture. A young selector with a passion for sound and community, he began building the foundation for what would become a legendary career.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1991</div>
+        <div class="timeline-content">
+          <div class="timeline-era">The Foundation</div>
+          <h3 class="timeline-title">Brain Records · Jungle & Hardcore Pioneer</h3>
+          <p class="timeline-desc">Joining the legendary <strong>Brain Records</strong>, Dlux became a central figure in the development of Hardcore and Jungle. Working alongside <strong>Bizzy B</strong>, with productions featuring <strong>Lennie De Ice</strong> and <strong>DJ Hype</strong>, he helped forge the pioneering sounds that defined the early 90s UK rave scene.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2011</div>
+        <div class="timeline-content">
+          <div class="timeline-era">Innovation</div>
+          <h3 class="timeline-title">We Play Music — Live from London</h3>
+          <p class="timeline-desc">As the longest-serving member and Head of <strong>Deja Vu FM</strong>, Dlux created <strong>We Play Music</strong> — an original concept combining live bands and artist performances, broadcast live from venues across London. A bridge between underground radio and live music culture.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2021</div>
+        <div class="timeline-content">
+          <div class="timeline-era">The Mission</div>
+          <h3 class="timeline-title">Creative Engagement Services</h3>
+          <p class="timeline-desc">Drawing on his experience as a specialist coordinator in conflict mediation and youth exploitation for local government, Dlux founded <strong>Creative Engagement Services</strong> — a platform utilising deep knowledge of the creative industries to empower the next generation and provide genuine support for young people.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- MENTORED -->
+<section id="mentored">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label reveal">Engineering & Mentorship</div>
+      <h2 class="section-title reveal reveal-delay-1">Artists <em>Shaped</em></h2>
+    </div>
+    <div class="artists-grid reveal">
+      <div class="artist-card">
+        <div class="artist-num">01</div>
+        <div class="artist-name">Kano</div>
+      </div>
+      <div class="artist-card">
+        <div class="artist-num">02</div>
+        <div class="artist-name">Lethal Bizzle</div>
+      </div>
+      <div class="artist-card">
+        <div class="artist-num">03</div>
+        <div class="artist-name">Big Narstie</div>
+      </div>
+      <div class="artist-card">
+        <div class="artist-num">04</div>
+        <div class="artist-name">Ruff Sqwad</div>
+      </div>
+      <div class="artist-card">
+        <div class="artist-num">05</div>
+        <div class="artist-name">Frisco</div>
+      </div>
+      <div class="artist-card">
+        <div class="artist-num">06</div>
+        <div class="artist-name">D Power Diesle</div>
+      </div>
+      <div class="artist-card">
+        <div class="artist-num">07</div>
+        <div class="artist-name">No Lay</div>
+      </div>
+      <div class="artist-card">
+        <div class="artist-num">08</div>
+        <div class="artist-name">2Play</div>
+        <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-top:6px;">MOBO Winner</div>
+      </div>
+    </div>
+    <p class="reveal" style="text-align:center;margin-top:48px;font-size:16px;line-height:1.8;color:var(--muted);max-width:600px;margin-left:auto;margin-right:auto;">
+      A specialist in production and engineering, Dlux has been an essential mentor to a generation of British talent — not a gatekeeper keeping others out, but the frame that holds the door open.
+    </p>
+  </div>
+</section>
+
+<!-- MANIFESTO QUOTE -->
+<section id="manifesto">
+  <div class="section-inner">
+    <p class="manifesto-text">
+      "He didn't just open a door; he became the frame that holds it open."
+    </p>
+    <p class="manifesto-attr">— The Philosophy of DJ DLUX</p>
+  </div>
+</section>
+
+<!-- AFFILIATIONS -->
+<section id="affiliations">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label reveal">Platforms & Projects</div>
+      <h2 class="section-title reveal reveal-delay-1">Building the <em>Infrastructure</em></h2>
+    </div>
+    <div class="affil-grid">
+      <div class="affil-card reveal">
+        <div class="affil-year">Est. 1980s · Ongoing</div>
+        <div class="affil-name">Deja Vu FM</div>
+        <div class="affil-desc">The legendary underground station. As the longest-serving member and Head of Deja Vu FM, Dlux has steered this iconic station through decades of change — ensuring it remains the heartbeat of the British underground.</div>
+      </div>
+      <div class="affil-card reveal reveal-delay-1">
+        <div class="affil-year">Est. 1991</div>
+        <div class="affil-name">Brain Records</div>
+        <div class="affil-desc">A founding chapter of UK Jungle and Hardcore history. Dlux's contributions to Brain Records remain his most celebrated work — shaping the DNA of breakbeat culture alongside the scene's greatest names.</div>
+      </div>
+      <div class="affil-card reveal reveal-delay-2">
+        <div class="affil-year">Est. 2011</div>
+        <div class="affil-name">We Play Music</div>
+        <div class="affil-desc">An original concept combining live bands and artist performances, broadcast live from venues across London. A visionary bridge between underground radio and the live music world, created and curated by Dlux.</div>
+      </div>
+      <div class="affil-card reveal reveal-delay-3">
+        <div class="affil-year">Est. 2021</div>
+        <div class="affil-name">Creative Engagement Services</div>
+        <div class="affil-desc">Community at the core. A platform that harnesses the power of creative industries to empower young people — built on Dlux's experience in conflict mediation, youth exploitation coordination, and lifelong mentorship.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIALS -->
+<section id="socials">
+  <div class="section-inner">
+    <p class="socials-heading">Find DJ DLUX across the platforms</p>
+    <div class="social-links">
+      <a href="https://instagram.com/originaldjdlux" class="social-link" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.tiktok.com/@originaldjdlux" class="social-link" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05A6.34 6.34 0 003.15 15.3a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V9.52a8.16 8.16 0 004.77 1.52V7.58a4.85 4.85 0 01-1.01-.89z"/></svg>
+        TikTok
+      </a>
+      <a href="https://www.youtube.com/@DJDlux" class="social-link" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3.02 3.02 0 00-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.55A3.02 3.02 0 00.5 6.19 31.5 31.5 0 000 12a31.5 31.5 0 00.5 5.81 3.02 3.02 0 002.12 2.14C4.5 20.5 12 20.5 12 20.5s7.5 0 9.38-.55a3.02 3.02 0 002.12-2.14A31.5 31.5 0 0024 12a31.5 31.5 0 00-.5-5.81zM9.75 15.5v-7l6.25 3.5-6.25 3.5z"/></svg>
+        YouTube
+      </a>
+      <a href="https://open.spotify.com/artist/0lFVm4wTmgpg7XSATlj8HP" class="social-link" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm4.58 14.42a.62.62 0 01-.86.21c-2.36-1.44-5.33-1.77-8.83-.97a.62.62 0 01-.28-1.21c3.83-.87 7.11-.5 9.76 1.11a.62.62 0 01.21.86zm1.22-2.72a.78.78 0 01-1.07.26c-2.7-1.66-6.82-2.14-10.01-1.17a.78.78 0 01-.45-1.49c3.65-1.1 8.19-.57 11.27 1.33a.78.78 0 01.26 1.07zm.1-2.83C14.62 9 9.33 8.79 6.09 9.79a.94.94 0 11-.54-1.8C9.27 6.9 15.1 7.14 18.77 9.28a.94.94 0 11-.87 1.59z"/></svg>
+        Spotify
+      </a>
+      <a href="https://soundcloud.com/dluxdejavu" class="social-link" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.17 13.97c-.06.32.22.6.54.6h.72l.35-2.17-.35-2.17c-.18 0-.33.08-.44.2a.56.56 0 00-.82.03v3.51zm2.29.6h.72l.39-2.77-.39-2.2a.56.56 0 00-1.11 0l-.35 2.2.35 2.77h.39zm1.94 0h.71l.43-2.77-.43-3.45a.56.56 0 00-1.13 0l-.37 3.45.37 2.77h.42zm2 0h.71l.45-2.77-.45-4.38a.55.55 0 00-1.1 0l-.4 4.38.4 2.77h.39zm2 0h.71l.46-2.77-.46-5.38a.55.55 0 00-1.1 0l-.43 5.38.43 2.77h.39zM12 14.57h8.25a3.75 3.75 0 000-7.5 3.6 3.6 0 00-.84.1A5.12 5.12 0 0014.24 5a5.12 5.12 0 00-5 3.94A2.5 2.5 0 009.5 12a2.5 2.5 0 002.5 2.57z"/></svg>
+        SoundCloud
+      </a>
+      <a href="https://www.mixcloud.com/djdlux/" class="social-link" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12a4 4 0 018 0"/><path d="M6 12a6 6 0 0112 0"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+        Mixcloud
+      </a>
+      <a href="https://originaldjdlux.bandcamp.com/" class="social-link" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 18.75l7.437-13.5H24l-7.438 13.5z"/></svg>
+        Bandcamp
+      </a>
+      <a href="https://www.facebook.com/DJ-DLUX-49593026555/" class="social-link" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <h2 class="contact-title reveal">GET IN<br>TOUCH</h2>
+    <p class="contact-sub reveal reveal-delay-1">For bookings, collaborations, and enquiries</p>
+    <a href="mailto:OriginalDJDlux@gmail.com" class="contact-email reveal reveal-delay-2">
+      OriginalDJDlux@gmail.com
+    </a>
+    <p class="contact-note reveal reveal-delay-3">
+      DJ Bookings · Production Enquiries · Creative Engagement Services · Mentorship
+    </p>
+    <div style="margin-top: 52px;" class="reveal reveal-delay-3">
+      <a href="https://www.djdlux.co.uk" class="btn-primary" style="display:inline-block;">
+        Visit Official Website
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">DJ DLUX</a>
+  <p class="footer-copy">© 2026 DJ DLUX · All rights reserved</p>
+  <a href="https://www.djdlux.co.uk" class="footer-link">djdlux.co.uk ↗</a>
+</footer>
+
+<script>
+// CUSTOM CURSOR
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursor-ring');
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+    cursorRing.style.transform = 'translate(-50%, -50%) scale(1.5)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+    cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
+  });
+});
+}
+
+// NAV SCROLL
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// MOBILE MENU TOGGLE
+const menuToggle = document.getElementById('menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+menuToggle.addEventListener('click', () => {
+  menuToggle.classList.toggle('active');
+  navLinks.classList.toggle('active');
+  document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+});
+
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    menuToggle.classList.remove('active');
+    navLinks.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+});
+
+// PARTICLE CANVAS
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = canvas.offsetWidth;
+  H = canvas.height = canvas.offsetHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.size = Math.random() * 1.5 + 0.3;
+    this.speedX = (Math.random() - 0.5) * 0.4;
+    this.speedY = (Math.random() - 0.5) * 0.4;
+    this.opacity = Math.random() * 0.5 + 0.1;
+    this.life = Math.random() * 200 + 100;
+    this.age = 0;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.age++;
+    if (this.age > this.life || this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+  }
+  draw() {
+    const alpha = this.opacity * (1 - this.age / this.life);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = '#C9A84C';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+function animateParticles() {
+  ctx.clearRect(0, 0, W, H);
+  // Draw connections
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 80) {
+        ctx.save();
+        ctx.globalAlpha = 0.06 * (1 - dist / 80);
+        ctx.strokeStyle = '#C9A84C';
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+  }
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// WAVEFORM
+const waveformEl = document.getElementById('waveform');
+const barCount = Math.floor(window.innerWidth / 6);
+for (let i = 0; i < barCount; i++) {
+  const bar = document.createElement('div');
+  bar.className = 'wave-bar';
+  const baseH = 8 + Math.random() * 40;
+  bar.style.height = baseH + 'px';
+  bar.style.animationDelay = (Math.random() * 2) + 's';
+  waveformEl.appendChild(bar);
+}
+
+function animateWaveform() {
+  const bars = waveformEl.querySelectorAll('.wave-bar');
+  const time = Date.now() * 0.003;
+  bars.forEach((bar, i) => {
+    const h = 8 + Math.abs(Math.sin(time + i * 0.18) * 55 + Math.sin(time * 1.3 + i * 0.3) * 20);
+    bar.style.height = h + 'px';
+    bar.style.opacity = 0.3 + Math.abs(Math.sin(time + i * 0.1)) * 0.5;
+  });
+  requestAnimationFrame(animateWaveform);
+}
+animateWaveform();
+
+// SCROLL REVEAL
+const revealEls = document.querySelectorAll('.reveal, .timeline-item');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+revealEls.forEach(el => observer.observe(el));
+
+// COUNTER ANIMATION
+function animateCounter(el, target, duration = 1800) {
+  const isYear = target > 100;
+  const start = isYear ? target - 4 : 0;
+  const startTime = performance.now();
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(start + (target - start) * eased);
+    el.textContent = current;
+    if (progress < 1) requestAnimationFrame(update);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(update);
+}
+
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const num = e.target.querySelector('.stat-number');
+      if (num && num.dataset.target) {
+        animateCounter(num, parseInt(num.dataset.target));
+        statObserver.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-box').forEach(box => statObserver.observe(box));
+</script>
+</body>
+</html>
