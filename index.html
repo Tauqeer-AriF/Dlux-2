@@ -30,6 +30,40 @@
     font-weight: 300;
     overflow-x: hidden;
   }
+  body.loading { overflow: hidden; }
+
+  /* PRELOADER */
+  #preloader {
+    position: fixed; inset: 0; background: var(--black);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 2000; transition: opacity 0.8s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.8s;
+  }
+  #preloader.loaded { opacity: 0; visibility: hidden; }
+  .loader-content { position: relative; display: flex; flex-direction: column; align-items: center; }
+  .loader-logo-svg {
+    width: 280px; height: 60px; margin-bottom: 12px;
+  }
+  .loader-logo-svg text {
+    font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 0.3em;
+    fill: none; stroke: var(--gold); stroke-width: 0.7;
+    stroke-dasharray: 600; stroke-dashoffset: 600;
+    animation: logo-draw 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes logo-draw {
+    0% { stroke-dashoffset: 600; fill: rgba(201, 168, 76, 0); filter: drop-shadow(0 0 0 rgba(201, 168, 76, 0)); }
+    70% { stroke-dashoffset: 0; fill: rgba(201, 168, 76, 0); filter: drop-shadow(0 0 0 rgba(201, 168, 76, 0)); }
+    100% { stroke-dashoffset: 0; fill: rgba(201, 168, 76, 1); filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.6)); }
+  }
+  .loader-progress-container {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 1px;
+    background: rgba(201, 168, 76, 0.05); overflow: hidden;
+  }
+  .loader-progress-bar {
+    height: 100%; width: 0; background: var(--gold);
+    box-shadow: 0 0 10px var(--gold);
+    animation: loader-progress 2.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes loader-progress { to { width: 100%; } }
 
   /* CUSTOM CURSOR */
   @media (hover: hover) and (pointer: fine) {
@@ -101,6 +135,7 @@
     font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
     padding: 10px 24px;
     border: 1px solid var(--gold);
+    white-space: nowrap;
     color: var(--gold);
     text-decoration: none;
     transition: background 0.3s, color 0.3s;
@@ -733,6 +768,7 @@
     z-index: 999;
     opacity: 0;
     visibility: hidden;
+    border-radius: 50%;
     transition: all 0.4s ease;
   }
   .back-to-top.visible {
@@ -782,6 +818,8 @@
     .nav-links a { font-size: 16px; color: var(--text); }
     .nav-logo { font-size: 24px; }
     .nav-cta { padding: 8px 18px; font-size: 10px; }
+    .nav-logo { font-size: 22px; letter-spacing: 0.1em; }
+    .nav-cta { padding: 8px 14px; font-size: 9px; letter-spacing: 0.1em; }
 
     .section-inner { padding: 0 24px; }
     #about, #legacy, #mentored, #affiliations, #contact { padding: 80px 0; }
@@ -792,9 +830,13 @@
 
     .back-to-top {
       bottom: 20px;
+      bottom: 30px;
       right: 20px;
       width: 44px;
       height: 44px;
+      background: rgba(6, 6, 6, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
     }
 
     .timeline-item { gap: 30px; padding-left: 40px; }
@@ -812,8 +854,21 @@
   }
 
   @media (max-width: 600px) {
+    .hero-eyebrow { 
+      display: flex; align-items: center; justify-content: center; 
+      white-space: nowrap; font-size: 9px; margin-bottom: 20px;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after { width: 15px; margin: 0 8px; }
+    .hero-eyebrow span { margin: 0 6px; }
+
     .hero-ctas { flex-direction: column; gap: 12px; width: 100%; max-width: 280px; margin-left: auto; margin-right: auto; }
     .hero-ctas a { width: 100%; text-align: center; }
+    .hero-name { font-size: clamp(60px, 18vw, 100px); }
+    .nav-logo { font-size: 18px; }
+    .nav-cta { 
+      padding: 6px 10px; 
+      font-size: 8px;
+    }
     .timeline-item { grid-template-columns: 1fr; gap: 10px; padding: 32px 0 32px 30px; }
     .timeline-item::before { top: 38px; }
     .timeline-year { font-size: 32px; }
@@ -822,7 +877,19 @@
   }
 </style>
 </head>
-<body>
+<body class="loading">
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="loader-content">
+    <svg class="loader-logo-svg" viewBox="0 0 300 60">
+      <text x="50%" y="50%" dy=".35em" text-anchor="middle">DJ DLUX</text>
+    </svg>
+  </div>
+  <div class="loader-progress-container">
+    <div class="loader-progress-bar"></div>
+  </div>
+</div>
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursor-ring"></div>
@@ -1398,6 +1465,16 @@ window.addEventListener('scroll', () => {
   } else {
     backToTopBtn.classList.remove('visible');
   }
+});
+
+
+// PRELOADER LOGIC
+window.addEventListener('load', () => {
+  const preloader = document.getElementById('preloader');
+  setTimeout(() => {
+    preloader.classList.add('loaded');
+    document.body.classList.remove('loading');
+  }, 2800); // Synchronize with the logo draw and progress bar
 });
 
 backToTopBtn.addEventListener('click', () => {
